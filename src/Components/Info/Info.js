@@ -5,24 +5,29 @@ import axios from "axios";
 const Info = ({country}) => {
     const [borders, setBorders] = useState([]);
 
-    useEffect( () => {
-       const borderNames = async () => {
-           const names = [];
-           for (let i = 0; i < country.borders.length; i++) {
-               if (country.borders > 0) {
-                   try {
-                       const data = await axios.get(`https://restcountries.eu/rest/v2/alpha/${country.borders[i]}`);
-                       names.push(data[0].name);
-                   } catch (e) {
-                       console.log(e)
-                   }
-               }
-           }
-           setBorders(names)
-       };
+    useEffect(() => {
+        const borderNames = () => {
+            const names = [];
+            if (country.borders !== undefined) {
+                const requests = [];
+                country.borders.map((name) => {
+                    try {
+                        requests.push(axios.get(`https://restcountries.eu/rest/v2/alpha/${name}`))
+                    } catch (e) {
+                        console.log(e)
+                    }
+                })
+                Promise.all(requests).then(function(values) {
+                    const names = [];
+                    for (let i = 0; i < values.length; i++) {
+                        names.push(values[i].data.name)
+                    }
+                    setBorders(names)
+                });
+            }
+        };
+        borderNames()
     });
-
-    console.log(borders);
 
     return (
         <div className="info">
@@ -40,8 +45,8 @@ const Info = ({country}) => {
                 </div>
                 <div>
                     <h2>Border with:</h2>
-                    {borders.map((name) => {
-                        return <p>{name}</p>
+                    {borders.map((name, index) => {
+                        return <p key={index}>{name}</p>
                     })}
                 </div>
             </div>
