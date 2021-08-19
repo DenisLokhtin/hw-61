@@ -8,7 +8,7 @@ const Info = ({country}) => {
     useEffect(() => {
         const borderNames = () => {
             const names = [];
-            if (country.borders !== undefined) {
+            if (country.borders !== undefined && country.borders.length > 0) {
                 const requests = [];
                 country.borders.map((name) => {
                     try {
@@ -17,17 +17,21 @@ const Info = ({country}) => {
                         console.log(e)
                     }
                 })
-                Promise.all(requests).then(function(values) {
+                Promise.all(requests).then(function (values) {
                     const names = [];
                     for (let i = 0; i < values.length; i++) {
                         names.push(values[i].data.name)
                     }
-                    setBorders(names)
+                    if (names.length !== 0) {
+                        setBorders(names)
+                    }
                 });
+            } else {
+                setBorders([]);
             }
         };
         borderNames()
-    });
+    }, [country.borders]);
 
     return (
         <div className="info">
