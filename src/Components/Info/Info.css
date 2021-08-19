@@ -1,0 +1,29 @@
+.info {
+    width: 80%;
+    height: 97vh;
+    border: 2px solid black;
+    padding: 10px;
+    border-radius: 3px;
+}
+
+h1.info {
+    margin-top: 0;
+}
+
+.text {
+    display: inline-block;
+}
+
+.flag {
+    float: right;
+}
+
+.result {
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+.flag-img {
+    width: 500px;
+    height: 300px;
+}
